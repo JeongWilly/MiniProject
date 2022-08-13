@@ -18,7 +18,9 @@ public class Member extends Timestamped {
    @GeneratedValue(strategy = GenerationType.IDENTITY) //GenerationType.IDENTITY : ID값이 서로 영향없이 자기만의 테이블 기준으로 올라간다.
    private Long id;
    @Column(nullable = false, unique = true)
-   private String nickname;
+   private String username;
+
+
    @JsonIgnore
    @Column(nullable = false)
    private String password;
@@ -29,8 +31,8 @@ public class Member extends Timestamped {
 
 
    @Builder
-   public Member(String nickname, String password, Authority authority) {
-      this.nickname = nickname;
+   public Member(String username, String password, Authority authority) {
+      this.username = username;
       this.password = password;
       this.authority = authority;
    }

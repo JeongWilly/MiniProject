@@ -60,12 +60,6 @@ public class TokenProvider {
               .setHeaderParam("JWT_HEADER_PARAM_TYPE","headerType")
               .compact();
 
-
-//      return Jwts.builder()
-//              .setHeaderParam("typ", BEARER_TYPE)
-//              .claim(AUTHORITIES_KEY, authorities)
-//              .setExpiration(accessTokenExpiresIn)
-//              .compact();
       return TokenDto.builder()
               .grantType(BEARER_TYPE)
               .accessToken(accessToken)

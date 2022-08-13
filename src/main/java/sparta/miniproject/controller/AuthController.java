@@ -34,7 +34,7 @@ public class AuthController {
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Refresh-Token", tokenDto.getRefreshToken());
         response.setHeader("Access-Token-Expire-Time", String.valueOf(tokenDto.getAccessTokenExpiresIn()));
-        return memberRepository.findByNickname(memberRequestDto.getNickname());
+        return memberRepository.findByUsername(memberRequestDto.getUsername());
     }
 
     @PostMapping("/reissue")  //재발급을 위한 로직
