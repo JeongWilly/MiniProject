@@ -12,7 +12,6 @@ import sparta.miniproject.repository.BoardRepository;
 import sparta.miniproject.repository.MemberRepository;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +41,11 @@ public class BoardService {
 
     //게시물작성
     public Board createBoard(BoardRequestDto boardRequestDto){ // ? IOException?
+        System.out.println("여기2");
        Member member=getMember();
        Board board = new Board(boardRequestDto,member);
        member.getBoardList().add(board);
+       boardRepository.save(board);
        return board;
     }
 //
@@ -54,29 +55,38 @@ public class BoardService {
     List<Board>board = boardRepository.findAll();
     for(Board brd1 : board){
         boardResponseDtoList.add(new BoardResponseDto(brd1));
-
     }return boardResponseDtoList;
 
 
     }
 
+    //게시물 상세 조회
+    public Board getEachBoard(Long board_id) {
+        Board board = boardRepository.findById(board_id).orElseThrow(
+                () ->new IllegalArgumentException("찾는 게시물이 존재하지 않습니다.")
+        );
+        return board;
+    }
+
 
     //게시물 수정
     @Transactional
-    public void update(Long boardId, BoardRequestDto boardRequestDto) {
-        Board board = boardRepository.findById(boardId)
+    public void update(Long board_id, BoardRequestDto boardRequestDto) {
+        Board board = boardRepository.findById(board_id)
                 .orElseThrow(()-> new IllegalArgumentException("아이디가 없습니다"));
+        System.out.println(boardRequestDto.getContent());
         board.update(boardRequestDto);
+        boardRepository.save(board);
     }
 
 
     //게시물 삭제
-    public void deleteBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId)
+    public Long deleteBoard(Long board_id) {
+        Board board = boardRepository.findById(board_id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다"));
-
         boardRepository.delete(board);
+        System.out.println("여기1");
+        return board_id;
     }
-
 
 }

@@ -6,7 +6,7 @@ import sparta.miniproject.model.Board;
 @Getter
 public class BoardResponseDto {
 
-    private Long boardId;
+    private Long board_id;
 
     private String nickname;
 
@@ -15,7 +15,7 @@ public class BoardResponseDto {
     private String content;
 
     public BoardResponseDto(Board board){
-        this.boardId=board.getBoardId();
+        this.board_id=board.getBoard_id();
         this.nickname=board.getNickname();
         this.title=board.getTitle();
         this.content=board.getContent();

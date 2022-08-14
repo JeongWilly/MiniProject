@@ -2,6 +2,7 @@ package sparta.miniproject.model;
 import javax.persistence.*;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -18,19 +20,21 @@ import java.util.List;
 public class Board  {
 
     @Id
+    @Column(name="board_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long boardId;
+    private Long board_id;
 
     @Column(nullable=false)
     private String nickname;
 
-    @Column(nullable=false)
+
     private String title;
 
     @Column(nullable=false)
     private String content;
 
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     public Board(BoardRequestDto boardRequestDto, Member member) {
@@ -46,12 +50,5 @@ public class Board  {
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
     }
-
-
-
-
-
-
-
 
 }
