@@ -36,7 +36,7 @@ public class AuthService {
         }
         if (memberRepository.existsByUsername(memberRequestDto.getUsername())) {
             throw new IllegalArgumentException("중복된 닉네임입니다.");
-        } else if (!memberRequestDto.getPassword().equals(memberRequestDto.getPasswordConfirm()))
+        } else if (!memberRequestDto.getPassword().equals(memberRequestDto.getValidPassword()))
             throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         Member member = memberRequestDto.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));

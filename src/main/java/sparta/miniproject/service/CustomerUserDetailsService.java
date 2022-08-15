@@ -33,7 +33,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
         return new User(
-                String.valueOf(member.getId()),
+                String.valueOf(member.getMember_id()),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
