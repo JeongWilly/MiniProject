@@ -19,7 +19,7 @@ public class MemberRequestDto {
 
    private String password;
 
-   private String passwordConfirm;
+   private String validPassword;
 
    public Member toMember(PasswordEncoder passwordEncoder) {
       return Member.builder()
