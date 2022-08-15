@@ -41,9 +41,11 @@ public class BoardService {
 
     //게시물작성
     public Board createBoard(BoardRequestDto boardRequestDto){ // ? IOException?
-        System.out.println("여기2");
+//        System.out.println("여기2");
        Member member=getMember();
-       Board board = new Board(boardRequestDto,member);
+        String nickname = getNickname();
+//        Board board = new Board(boardRequestDto,member);
+        Board board = new Board(boardRequestDto,nickname);
        member.getBoardList().add(board);
        boardRepository.save(board);
        return board;

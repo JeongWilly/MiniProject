@@ -41,6 +41,9 @@ public class Member extends Timestamped {
    @OneToMany(fetch = FetchType.LAZY,mappedBy = "member" )
    private List<Board> boardList;
 
+
+
+
    @Builder
    public Member(String username, String nickname, String password, Authority authority) {
       this.username = username;

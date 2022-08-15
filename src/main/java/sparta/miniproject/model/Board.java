@@ -45,6 +45,14 @@ public class Board  {
         //VOID에 따라 생성자와 메서드가 갈림
     }
 
+    public Board(BoardRequestDto boardRequestDto, String nickname) {
+        this.nickname = member.getNickname();   //작성자 기준으로 물어볼것 user?nickname
+        this.title = boardRequestDto.getTitle();
+        this.content = boardRequestDto.getContent();
+        this.nickname =nickname;
+        //VOID에 따라 생성자와 메서드가 갈림
+    }
+
 
     public void update(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
