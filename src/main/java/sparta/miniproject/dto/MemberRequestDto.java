@@ -15,14 +15,17 @@ public class MemberRequestDto {
 //
    private String username;
 
+   private String nickname;
+
    private String password;
 
-   private String passwordConfirm;
+   private String validPassword;
 
    public Member toMember(PasswordEncoder passwordEncoder) {
       return Member.builder()
               .username(username)
               .password(passwordEncoder.encode(password))
+              .nickname(nickname)
               .authority(Authority.ROLE_USER)
               .build();
    }
