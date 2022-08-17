@@ -55,6 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
       } catch(JwtException e){
          request.setAttribute("exception", Code.UNKNOWN_ERROR);
       }
+
       filterChain.doFilter(request, response);
    }
 

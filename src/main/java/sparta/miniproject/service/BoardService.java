@@ -85,25 +85,26 @@ public class BoardService {
         return findBoard;
     }
 
-
     //게시물 수정
     @Transactional
     public void update(Long board_id, BoardRequestDto boardRequestDto) {
-        Board board = boardRepository.findById(board_id)
-                .orElseThrow(() -> new IllegalArgumentException("아이디가 없습니다"));
-        System.out.println(boardRequestDto.getContent());
-        board.update(boardRequestDto);
-        boardRepository.save(board);
+        Board board = boardRepository.findById(board_id).orElseThrow(() -> new IllegalArgumentException("아이디가 없습니다"));
+        if (getNickname().equals(board.getNickname())) {
+            board.update(boardRequestDto);
+        } else {
+            throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
+        }
     }
-
 
     //게시물 삭제
     public Long deleteBoard(Long board_id) {
-        Board board = boardRepository.findById(board_id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다"));
-        boardRepository.delete(board);
-        System.out.println("여기1");
+        Board board = boardRepository.findById(board_id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다"));
+
+        if (getNickname().equals(board.getNickname())) {
+            boardRepository.delete(board);
+        } else {
+            throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
+        }
         return board_id;
     }
-
 }

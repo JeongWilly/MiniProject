@@ -38,11 +38,11 @@ public class CommentService {
 
     //Comment 작성
     @Transactional
-   public Comment createComment(Long boardId,CommentRequestDto commentRequestDto) {
-        String nickname=getNickname();
-        Board board=boardRepository.findById(boardId)
-                .orElseThrow(()-> new IllegalArgumentException("해당 게시물이 존재하지 않습니다"));
-        Comment comment=new Comment(nickname,commentRequestDto,board); //해당 댓글이 어디에 달렸는지가 안달려있음,양측에 다 기입해줘야함
+    public Comment createComment(Long boardId, CommentRequestDto commentRequestDto) {
+        String nickname = getNickname();
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다"));
+        Comment comment = new Comment(nickname, commentRequestDto, board); //해당 댓글이 어디에 달렸는지가 안달려있음,양측에 다 기입해줘야함
 
         board.addComment(comment);
 
@@ -51,28 +51,25 @@ public class CommentService {
 
     //Comment 수정
     @Transactional
-    public void updateComment(Long commentId, CommentRequestDto commentRequestDto){
+    public void updateComment(Long commentId, CommentRequestDto commentRequestDto) {
         Comment comment = commentRepository.findById(commentId).
-                orElseThrow(()->new IllegalArgumentException("잘못된 접근입니다.(댓글)"+commentId));
+                orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(댓글)" + commentId));
 
-      if(getNickname().equals(comment.getNickname())){
-                comment.updateCmt(commentRequestDto);
-        }else{
-          throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
-      }
+        if (getNickname().equals(comment.getNickname())) {
+            comment.updateCmt(commentRequestDto);
+        } else {
+            throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
+        }
     }
 
     @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).
-                orElseThrow(()->new IllegalArgumentException("잘못된 접근입니다.(댓글)"+commentId));
-        if(getNickname().equals(comment.getNickname())){
-//            Board boardDelete=boardRepository
-
+                orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(댓글)" + commentId));
+        if (getNickname().equals(comment.getNickname())) {
             commentRepository.delete(comment);
-
-        }else{
-            throw new IllegalArgumentException("여긴 못 지나간다"); // 예외처리를 던져줄때는 throw
+        } else {
+            throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
         }
     }
 
