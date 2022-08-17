@@ -28,7 +28,9 @@ public class BoardResponseDto {
     }
 
     @Builder
-    public BoardResponseDto(String nickname, String title, String content, LocalDateTime createTime) {
+
+    public BoardResponseDto(Long boardId, String nickname, String title, String content, LocalDateTime createTime) {
+        this.boardId = boardId;
         this.nickname = nickname;
         this.title = title;
         this.content = content;

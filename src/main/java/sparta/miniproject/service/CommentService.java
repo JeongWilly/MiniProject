@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sparta.miniproject.dto.CommentRequestDto;
+import sparta.miniproject.dto.CommentResponseDto;
 import sparta.miniproject.model.Board;
 import sparta.miniproject.model.Comment;
 import sparta.miniproject.model.Member;
@@ -12,6 +13,8 @@ import sparta.miniproject.repository.CommentRepository;
 import sparta.miniproject.repository.MemberRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -76,6 +79,20 @@ public class CommentService {
         }else{
             throw new IllegalArgumentException("여긴 못 지나간다"); // 예외처리를 던져줄때는 throw
         }
+    }
+
+    public List<CommentResponseDto> getCommentList(Long boardId) {
+        List<Comment> commentList = commentRepository.findByBoard(boardId);
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+        for (Comment comment : commentList) {
+            CommentResponseDto commentResponseList = CommentResponseDto.builder()
+                    .id(comment.getId())
+                    .nickname(comment.getNickname())
+                    .content(comment.getUserContent())
+                    .build();
+            commentResponseDtos.add(commentResponseList);
+        }
+        return commentResponseDtos;
     }
 
 

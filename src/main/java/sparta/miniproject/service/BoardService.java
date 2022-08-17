@@ -58,6 +58,7 @@ public class BoardService {
         List<Board> boardList = boardRepository.findAll();
         for (Board board : boardList) {
             BoardResponseDto build = BoardResponseDto.builder()
+                    .boardId(board.getId())
                     .title(board.getTitle())
                     .nickname(board.getNickname())
                     .createTime(board.getCreatedAt())
