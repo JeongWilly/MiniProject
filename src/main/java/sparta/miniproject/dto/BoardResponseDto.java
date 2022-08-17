@@ -3,10 +3,12 @@ package sparta.miniproject.dto;
 import lombok.Getter;
 import sparta.miniproject.model.Board;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class BoardResponseDto {
 
-    private Long board_id;
+    private Long boardId;
 
     private String nickname;
 
@@ -14,11 +16,13 @@ public class BoardResponseDto {
 
     private String content;
 
+    private LocalDateTime createTime;
+
     public BoardResponseDto(Board board){
-        this.board_id=board.getBoard_id();
+        this.boardId=getBoardId();
         this.nickname=board.getNickname();
         this.title=board.getTitle();
         this.content=board.getContent();
-
+        this.createTime=board.getCreatedAt();
     }
 }
