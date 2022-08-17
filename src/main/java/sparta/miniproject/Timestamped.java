@@ -24,4 +24,7 @@ public abstract class Timestamped { //abstract클래스는 new Timestamped와 �
     @LastModifiedDate//수정시간
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime modifiedAt;
+
+
+
 }

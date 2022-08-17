@@ -1,5 +1,7 @@
 package sparta.miniproject.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Getter;
 import sparta.miniproject.model.Board;
 
@@ -16,13 +18,20 @@ public class BoardResponseDto {
 
     private String content;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createTime;
 
     public BoardResponseDto(Board board){
-        this.boardId=getBoardId();
         this.nickname=board.getNickname();
         this.title=board.getTitle();
-        this.content=board.getContent();
         this.createTime=board.getCreatedAt();
+    }
+
+    @Builder
+    public BoardResponseDto(String nickname, String title, String content, LocalDateTime createTime) {
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
     }
 }

@@ -26,47 +26,52 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     public String getNickname() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); //로그인해서 뽑은 아이디르 넣음
-        Optional<Member> member = memberRepository.findById(Long.valueOf(userName));
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName(); //로그인해서 뽑은 아이디르 넣음
+        Optional<Member> member = memberRepository.findById(Long.valueOf(userId));
         return member.get().getNickname();
     }
 
-
-    public Member getMember(){
+    public Member getMember() {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findById(Long.valueOf(userId))
-                .orElseThrow(()-> new RuntimeException("유저를 찾지 못했습니다."));
+                .orElseThrow(() -> new RuntimeException("유저를 찾지 못했습니다."));
         return member;
     }
 
 
     //게시물작성
-    public Board createBoard(BoardRequestDto boardRequestDto){ // ? IOException?
-//        System.out.println("여기2");
-       Member member=getMember();
+    public Board createBoard(BoardRequestDto boardRequestDto) {
         String nickname = getNickname();
-//        Board board = new Board(boardRequestDto,member);
-        Board board = new Board(boardRequestDto,nickname);
-       member.getBoardList().add(board);
-       boardRepository.save(board);
-       return board;
+        Board board = Board.builder()
+                .title(boardRequestDto.getTitle())
+                .content(boardRequestDto.getContent())
+                .nickname(nickname)
+                .build();
+
+        boardRepository.save(board);
+        return board;
     }
-//
+
     //게시물조회
-    public List<BoardResponseDto> getBoard(){
-    List<BoardResponseDto>boardResponseDtoList = new ArrayList<>();
-    List<Board>board = boardRepository.findAll();
-    for(Board brd1 : board){
-        boardResponseDtoList.add(new BoardResponseDto(brd1));
-    }return boardResponseDtoList;
-
-
+    public List<BoardResponseDto> getBoard() {
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        List<Board> boardList = boardRepository.findAll();
+        for (Board board : boardList) {
+            BoardResponseDto build = BoardResponseDto.builder()
+                    .title(board.getTitle())
+                    .nickname(board.getNickname())
+                    .createTime(board.getCreatedAt())
+                    .build();
+            boardResponseDtoList.add(build);
+        }
+        return boardResponseDtoList;
     }
 
+    //        boardResponseDtoList.add(new BoardResponseDto(board));
     //게시물 상세 조회
-    public Board getEachBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                () ->new IllegalArgumentException("찾는 게시물이 존재하지 않습니다.")
+    public Board getEachBoard(Long board_id) {
+        Board board = boardRepository.findById(board_id).orElseThrow(
+                () -> new IllegalArgumentException("찾는 게시물이 존재하지 않습니다.")
         );
         return board;
     }
@@ -74,40 +79,22 @@ public class BoardService {
 
     //게시물 수정
     @Transactional
-    public void update(Long boardId, BoardRequestDto boardRequestDto) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(()-> new IllegalArgumentException("아이디가 없습니다"));
+    public void update(Long board_id, BoardRequestDto boardRequestDto) {
+        Board board = boardRepository.findById(board_id)
+                .orElseThrow(() -> new IllegalArgumentException("아이디가 없습니다"));
         System.out.println(boardRequestDto.getContent());
-
-        if(getNickname().equals(board.getNickname())){
-//            Board boardDelete=boardRepository
-
-            board.update(boardRequestDto);
-
-
-        }else{
-            throw new IllegalArgumentException("여긴 못 지나간다"); // 예외처리를 던져줄때는 throw
-        }
-
+        board.update(boardRequestDto);
+        boardRepository.save(board);
     }
 
 
     //게시물 삭제
-    public Long deleteBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다"));
-
-
-        if(getNickname().equals(board.getNickname())){
-//            Board boardDelete=boardRepository
-
-            boardRepository.deleteById(boardId);
-//        System.out.println("여기1");
-            return boardId;
-        }else{
-            throw new IllegalArgumentException("여긴 못 지나간다"); // 예외처리를 던져줄때는 throw
-        }
-
+    public Long deleteBoard(Long board_id) {
+        Board board = boardRepository.findById(board_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다"));
+        boardRepository.delete(board);
+        System.out.println("여기1");
+        return board_id;
     }
 
 }

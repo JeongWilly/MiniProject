@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import sparta.miniproject.model.RefreshToken;
 import sparta.miniproject.repository.MemberRepository;
 import sparta.miniproject.repository.RefreshTokenRepository;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -28,32 +30,41 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    public String getLoginMemberNickname() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Member> member = memberRepository.findById(Long.valueOf(userId));
+        return member.get().getNickname();
+    }
+
     @Transactional
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if(!(Pattern.matches("[a-zA-Z0-9]*$",memberRequestDto.getUsername()) && (memberRequestDto.getUsername().length() > 3 && memberRequestDto.getUsername().length() <13)
-                && Pattern.matches("[a-zA-Z0-9]*$",memberRequestDto.getPassword()) && (memberRequestDto.getPassword().length() > 3 && memberRequestDto.getPassword().length() <33))){
+        if (!(Pattern.matches("^[a-zA-Z](?=.{0,28}[0-9])[0-9a-zA-Z]{4,15}$", memberRequestDto.getUsername()) && (memberRequestDto.getUsername().length() > 3 && memberRequestDto.getUsername().length() < 13)
+                && Pattern.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$", memberRequestDto.getPassword()) && (memberRequestDto.getPassword().length() > 3 && memberRequestDto.getPassword().length() < 33))) {
             throw new IllegalArgumentException("닉네임 혹은 비밀번호 조건을 확인해주세요.");
         }
         if (memberRepository.existsByUsername(memberRequestDto.getUsername())) {
-            throw new IllegalArgumentException("중복된 닉네임입니다.");
-        } else if (!memberRequestDto.getPassword().equals(memberRequestDto.getValidPassword()))
+            throw new IllegalArgumentException("중복된 아이디입니다.");
+        } else if (!memberRequestDto.getPassword().equals(memberRequestDto.getValidPassword())) {
             throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        } else if (!memberRepository.existsByNickname(memberRequestDto.getNickname())) {
+            throw new IllegalArgumentException("중복된 닉네임 입니다.");
+        }
+
         Member member = memberRequestDto.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
     @Transactional
     public TokenDto login(MemberRequestDto memberRequestDto) {
-//        if (!memberRepository.existsByUsername(memberRequestDto.getUsername()) ||
-//                !memberRepository.existsByPassword(passwordEncoder.encode(memberRequestDto.getPassword()))) {
-//            throw new RuntimeException("사용자를 찾을 수 없습니다");
-//        }
+        if (!memberRepository.existsByUsername(memberRequestDto.getUsername())) {
+            throw new RuntimeException("아이디 또는 비밀번호를 확인해주세요");
+        }
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-        try{
+        try {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
             // 3. 인증 정보를 기반으로 JWT 토큰 생성
@@ -69,9 +80,30 @@ public class AuthService {
 
             // 5. 토큰 발급
             return tokenDto;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
+    }
+
+
+    public boolean validateUsername(MemberRequestDto memberRequestDto) {
+        boolean flag = true;
+        if (memberRepository.existsByUsername(memberRequestDto.getUsername())) {
+            flag = false;
+        }
+        return flag;
+    }
+
+    public boolean validateNickname(MemberRequestDto memberRequestDto) {
+        boolean flag = true;
+        if (memberRepository.existsByNickname(memberRequestDto.getNickname())) {
+            flag = false;
+        }
+        return flag;
+    }
+
+    public String getLoginNickname() {
+        return getLoginMemberNickname();
     }
 
 
