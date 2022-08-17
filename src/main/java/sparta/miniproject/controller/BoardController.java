@@ -35,20 +35,20 @@ public class BoardController {
 
 
     //게시물 상세조회
-    @GetMapping("/api/auth/board/{board_id}")
-    public Board getBoard(@PathVariable Long board_id){return boardService.getEachBoard(board_id);}
+    @GetMapping("/api/board/{boardId}")
+    public Board getBoard(@PathVariable Long boardId){return boardService.getEachBoard(boardId);}
 
     //게시물수정하기
-    @PutMapping("/api/auth/board/{board_id}")
-    public Long update(@PathVariable Long board_id, @RequestBody BoardRequestDto boardRequestDto) {
-        boardService.update(board_id, boardRequestDto);
-        return board_id;
+    @PutMapping("/api/auth/board/{boardId}")
+    public Long update(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequestDto) {
+        boardService.update(boardId, boardRequestDto);
+        return boardId;
     }
 
 
     //게시물내에서 삭제하기
-    @DeleteMapping("/api/auth/board/{board_id}")
-    public Long deleteBoard(@PathVariable Long board_id){
-        return boardService.deleteBoard(board_id);
+    @DeleteMapping("/api/auth/board/{boardId}")
+    public Long deleteBoard(@PathVariable Long boardId){
+        return boardService.deleteBoard(boardId);
     }
 }

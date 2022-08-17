@@ -8,7 +8,8 @@ import sparta.miniproject.model.Member;
 import java.util.Optional;
 
 
-public interface BoardRepository extends JpaRepository<Board,  Long> {
-//    Optional<Board> findByBoard_id(String nickname);
+public interface BoardRepository extends JpaRepository<Board, Long> {
+//    Optional<Board> findBoardByBoard_id(Long Board_id);
+
 
 }
