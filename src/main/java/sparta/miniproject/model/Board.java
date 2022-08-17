@@ -3,9 +3,12 @@ import javax.persistence.*;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Primary;
+import sparta.miniproject.Timestamped;
 import sparta.miniproject.dto.BoardRequestDto;
 
 import javax.persistence.Entity;
@@ -16,13 +19,11 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name="Board")
-public class Board  {
+public class Board extends Timestamped {
 
     @Id
-    @Column(name="board_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long board_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long boardId;
 
     @Column(nullable=false)
     private String nickname;
@@ -37,16 +38,20 @@ public class Board  {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    public Board(BoardRequestDto boardRequestDto, Member member) {
-        this.nickname = member.getNickname();   //작성자 기준으로 물어볼것 user?nickname
-        this.title = boardRequestDto.getTitle();
-        this.content = boardRequestDto.getContent();
-        this.member =member;
-        //VOID에 따라 생성자와 메서드가 갈림
-    }
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Comment> commentList = new ArrayList<>();
+
+//    public Board(BoardRequestDto boardRequestDto, Member member) {
+//        this.nickname = member.getNickname();   //작성자 기준으로 물어볼것 user?nickname
+//        this.title = boardRequestDto.getTitle();
+//        this.content = boardRequestDto.getContent();
+//        this.member =member;
+//        //VOID에 따라 생성자와 메서드가 갈림
+//    }
 
     public Board(BoardRequestDto boardRequestDto, String nickname) {
-        this.nickname = member.getNickname();   //작성자 기준으로 물어볼것 user?nickname
+//        this.nickname = member.getNickname();   //작성자 기준으로 물어볼것 user?nickname
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
         this.nickname =nickname;
@@ -59,4 +64,7 @@ public class Board  {
         this.content = boardRequestDto.getContent();
     }
 
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
+    }
 }
