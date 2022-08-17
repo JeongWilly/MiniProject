@@ -30,12 +30,12 @@ public class Comment {
 
     public Comment(String nickname, CommentRequestDto commentRequestDto,Board board){
         this.nickname=nickname;
-        this.userContent=commentRequestDto.getContent();
+        this.userContent=commentRequestDto.getUserContent();
         this.board=board;
     }
 
     public void updateCmt(CommentRequestDto commentRequestDto){
-        this.userContent = commentRequestDto.getContent();
+        this.userContent = commentRequestDto.getUserContent();
     }
 
 }

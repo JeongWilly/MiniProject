@@ -42,13 +42,6 @@ public class AuthService {
                 && Pattern.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$", memberRequestDto.getPassword()) && (memberRequestDto.getPassword().length() > 3 && memberRequestDto.getPassword().length() < 33))) {
             throw new IllegalArgumentException("닉네임 혹은 비밀번호 조건을 확인해주세요.");
         }
-        if (memberRepository.existsByUsername(memberRequestDto.getUsername())) {
-            throw new IllegalArgumentException("중복된 아이디입니다.");
-        } else if (!memberRequestDto.getPassword().equals(memberRequestDto.getValidPassword())) {
-            throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        } else if (!memberRepository.existsByNickname(memberRequestDto.getNickname())) {
-            throw new IllegalArgumentException("중복된 닉네임 입니다.");
-        }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
@@ -56,9 +49,6 @@ public class AuthService {
 
     @Transactional
     public TokenDto login(MemberRequestDto memberRequestDto) {
-        if (!memberRepository.existsByUsername(memberRequestDto.getUsername())) {
-            throw new RuntimeException("아이디 또는 비밀번호를 확인해주세요");
-        }
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
 

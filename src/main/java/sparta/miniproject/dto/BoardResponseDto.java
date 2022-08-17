@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import sparta.miniproject.model.Board;
+import sparta.miniproject.model.Comment;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class BoardResponseDto {
@@ -17,6 +19,7 @@ public class BoardResponseDto {
     private String title;
 
     private String content;
+    private List<Comment> commentList;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createTime;
@@ -29,11 +32,12 @@ public class BoardResponseDto {
 
     @Builder
 
-    public BoardResponseDto(Long boardId, String nickname, String title, String content, LocalDateTime createTime) {
+    public BoardResponseDto(Long boardId, String nickname, String title, String content, List<Comment> commentList, LocalDateTime createTime) {
         this.boardId = boardId;
         this.nickname = nickname;
         this.title = title;
         this.content = content;
+        this.commentList = commentList;
         this.createTime = createTime;
     }
 }

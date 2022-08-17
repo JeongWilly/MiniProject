@@ -8,11 +8,11 @@ import sparta.miniproject.model.Board;
 import sparta.miniproject.repository.MemberRepository;
 import sparta.miniproject.service.BoardService;
 
-import javax.persistence.*;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BoardController {
 
     private final MemberRepository memberRepository;
@@ -22,6 +22,7 @@ public class BoardController {
     //게시물작성
     @PostMapping("/api/auth/board")
     public Board createBoard(@RequestBody BoardRequestDto boardRequestDto) {
+        System.out.println("글 작성 컨트롤러");
         return boardService.createBoard(boardRequestDto);
     }
 
@@ -36,7 +37,7 @@ public class BoardController {
 
     //게시물 상세조회
     @GetMapping("/api/board/{boardId}")
-    public Board getBoard(@PathVariable Long boardId){return boardService.getEachBoard(boardId);}
+    public BoardResponseDto getBoard(@PathVariable Long boardId){return boardService.getEachBoard(boardId);}
 
     //게시물수정하기
     @PutMapping("/api/auth/board/{boardId}")

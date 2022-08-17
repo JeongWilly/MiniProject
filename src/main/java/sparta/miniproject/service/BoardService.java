@@ -61,7 +61,9 @@ public class BoardService {
                     .boardId(board.getId())
                     .title(board.getTitle())
                     .nickname(board.getNickname())
+                    .content(board.getContent())
                     .createTime(board.getCreatedAt())
+                    .commentList(board.getCommentList())
                     .build();
             boardResponseDtoList.add(build);
         }
@@ -70,11 +72,17 @@ public class BoardService {
 
     //        boardResponseDtoList.add(new BoardResponseDto(board));
     //게시물 상세 조회
-    public Board getEachBoard(Long board_id) {
-        Board board = boardRepository.findById(board_id).orElseThrow(
-                () -> new IllegalArgumentException("찾는 게시물이 존재하지 않습니다.")
-        );
-        return board;
+    public BoardResponseDto getEachBoard(Long board_id) {
+        Board board = boardRepository.findById(board_id).orElseThrow(() -> new IllegalArgumentException("찾는 게시물이 존재하지 않습니다."));
+        BoardResponseDto findBoard = BoardResponseDto.builder()
+                .boardId(board.getId())
+                .nickname(board.getNickname())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .createTime(board.getCreatedAt())
+                .build();
+
+        return findBoard;
     }
 
 

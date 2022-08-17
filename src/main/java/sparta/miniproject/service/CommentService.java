@@ -57,8 +57,6 @@ public class CommentService {
 
       if(getNickname().equals(comment.getNickname())){
                 comment.updateCmt(commentRequestDto);
-//                commentRepository.save(comment);
-
         }else{
           throw new IllegalArgumentException("아이디가 일치하지 않습니다"); // 예외처리를 던져줄때는 throw
       }
@@ -68,13 +66,10 @@ public class CommentService {
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).
                 orElseThrow(()->new IllegalArgumentException("잘못된 접근입니다.(댓글)"+commentId));
-
-
         if(getNickname().equals(comment.getNickname())){
 //            Board boardDelete=boardRepository
 
             commentRepository.delete(comment);
-
 
         }else{
             throw new IllegalArgumentException("여긴 못 지나간다"); // 예외처리를 던져줄때는 throw
@@ -82,13 +77,16 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getCommentList(Long boardId) {
-        List<Comment> commentList = commentRepository.findByBoard(boardId);
+        Optional<Board> board = boardRepository.findById(boardId);
+        List<Comment> commentList = commentRepository.findByBoard(board.get());
+        System.out.println(commentList + "댓글목록");
+
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
         for (Comment comment : commentList) {
             CommentResponseDto commentResponseList = CommentResponseDto.builder()
                     .id(comment.getId())
                     .nickname(comment.getNickname())
-                    .content(comment.getUserContent())
+                    .userContent(comment.getUserContent())
                     .build();
             commentResponseDtos.add(commentResponseList);
         }
