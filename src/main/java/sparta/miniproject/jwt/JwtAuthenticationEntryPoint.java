@@ -50,16 +50,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
       JSONObject responseJson = new JSONObject();
       responseJson.put("message", code.getMessage());
       responseJson.put("code", code.getCode());
-      if(code.getCode().equals("1004"))
-         response.setStatus(HttpServletResponse.SC_OK);
-      else if(code.getCode().equals("1003"))
-         response.setStatus(HttpServletResponse.SC_OK);
-      else if(code.getCode().equals("1005"))
-         response.setStatus(HttpServletResponse.SC_OK);
-      else if(code.getCode().equals("1006"))
-         response.setStatus(HttpServletResponse.SC_OK);
-      else if(code.getCode().equals("1007"))
-         response.setStatus(HttpServletResponse.SC_OK);
+      if(code.getCode().equals("400"))
+         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
       response.getWriter().print(responseJson);
    }

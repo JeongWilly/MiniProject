@@ -1,5 +1,6 @@
 package sparta.miniproject.service;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,3 +40,27 @@ public class CustomerUserDetailsService implements UserDetailsService {
         );
     }
 }
+
+
+
+//@Service
+//@RequiredArgsConstructor
+//public class CustomerUserDetailsService implements UserDetailsService {
+//
+//    private final MemberRepository memberRepository;
+//
+//    @Override
+//    @Transactional
+//    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
+//        UserDetailsImpl findMember = memberRepository.findByUsername(username)
+//                .map(member -> createUserDetails("member",member))
+//                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+//        return findMember;
+//    }
+//
+//    // DB 에 User 값이 존재한다면 UserDetails 객체로 만들어서 리턴
+//    private UserDetailsImpl createUserDetails(String memberName , Member member) {
+//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
+//        return new UserDetailsImpl(member);
+//    }
+//}
