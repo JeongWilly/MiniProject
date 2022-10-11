@@ -1,7 +1,6 @@
 package sparta.miniproject.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,16 +11,16 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedOrigins("*") // 테스트용
-                .allowedMethods("GET","PUT","DELETE","OPTIONS")
-                .allowedMethods("POST")
+                .allowedOrigins("*")
+                .allowedMethods("GET","PUT","DELETE","POST","OPTIONS","HEAD")
                 .allowedHeaders("Authorization")
-                .exposedHeaders("Authorization")
-                .allowedMethods(
-                        HttpMethod.GET.name(),
-                        HttpMethod.HEAD.name(),
-                        HttpMethod.POST.name(),
-                        HttpMethod.PUT.name(),
-                        HttpMethod.DELETE.name(),
-                        HttpMethod.OPTIONS.name());
+                .exposedHeaders("Authorization");
+//                .allowedMethods(
+//                        HttpMethod.GET.name(),
+//                        HttpMethod.HEAD.name(),
+//                        HttpMethod.POST.name(),
+//                        HttpMethod.PUT.name(),
+//                        HttpMethod.DELETE.name(),
+//                        HttpMethod.OPTIONS.name());
     }
 }

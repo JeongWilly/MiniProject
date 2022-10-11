@@ -21,7 +21,7 @@ public class BoardResponseDto {
     private String content;
     private List<Comment> commentList;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createTime;
 
     public BoardResponseDto(Board board){
@@ -31,7 +31,6 @@ public class BoardResponseDto {
     }
 
     @Builder
-
     public BoardResponseDto(Long boardId, String nickname, String title, String content, List<Comment> commentList, LocalDateTime createTime) {
         this.boardId = boardId;
         this.nickname = nickname;
